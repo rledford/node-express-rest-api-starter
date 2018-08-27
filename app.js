@@ -1,4 +1,4 @@
-var http = require('http'),
+const http = require('http'),
   path = require('path'),
   express = require('express'),
   bodyParser = require('body-parser'),
@@ -10,7 +10,7 @@ var http = require('http'),
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-var app = express();
+const app = express();
 
 app.use(cors());
 
@@ -53,7 +53,7 @@ require('./config/passport');
 app.use(require('./routes'));
 
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
