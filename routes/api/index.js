@@ -1,7 +1,6 @@
 const router = require('express').Router();
+const otherRouter = require('express').Router();
 
-router.get('/', (req, res, next) => {
-  return res.send(`test-api ${Date.now()}`);
-});
+router.use('/', require('./users'));
 
 module.exports = router;
