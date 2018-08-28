@@ -6,7 +6,7 @@ const auth = require('../auth');
 const User = mongoose.model('User');
 
 router.get('/users/list', function(req, res, next) {
-  User.find()
+  User.find({}, { username: 1, email: 1 })
     .then(function(users) {
       return res.json({ users: users || [] });
     })
@@ -54,15 +54,23 @@ router.put('/user', auth.required, function(req, res, next) {
 });
 
 router.post('/users/login', function(req, res, next) {
-  if (!req.body.user.email) {
-    return res.status(422).json({ errors: { email: 'cannot be blank' } });
+  if (!req.body.user.username && !req.body.user.email) {
+    return res
+      .status(422)
+      .json({ errors: { 'username or email': 'cannot be blank' } });
   }
 
   if (!req.body.user.password) {
     return res.status(422).json({ errors: { password: 'cannot be blank' } });
   }
 
-  passport.authenticate('local', { session: false }, function(err, user, info) {
+  const strategy = req.body.user.username ? 'username' : 'email';
+
+  passport.authenticate(strategy, { session: false }, function(
+    err,
+    user,
+    info
+  ) {
     if (err) {
       return next(err);
     }
