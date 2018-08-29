@@ -11,6 +11,9 @@ const http = require('http'),
 const isProduction = process.env.NODE_ENV === 'production';
 
 const app = express();
+const server = http.Server(app);
+
+require('./socket').init(server);
 
 app.use(cors());
 
@@ -74,8 +77,9 @@ if (!isProduction) {
   });
 }
 
-var server = app.listen(process.env.PORT || 3000, function() {
-  console.log(`listening on port ${server.address().port}`);
+const port = process.env.PORT || 3000;
+server.listen(port, function() {
+  console.log(`listening on port ${port}`);
 });
 
 module.exports = app;
