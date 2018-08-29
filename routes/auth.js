@@ -12,6 +12,14 @@ function getTokenFromHeader(req) {
   return null;
 }
 
+function getTokenFromSocketRequest(req) {
+  if (req.handshake && req.handshake.query) {
+    return req.handshake.query.token;
+  }
+
+  return null;
+}
+
 const auth = {
   required: jwt({
     secret,
@@ -23,6 +31,12 @@ const auth = {
     userProperty: 'payload',
     credentialsRequired: false,
     getToken: getTokenFromHeader
+  }),
+  socketio: jwt({
+    secret,
+    userProperty: 'payload',
+    credentialsRequired: true,
+    getToken: getTokenFromSocketRequest
   })
 };
 
