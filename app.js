@@ -55,7 +55,7 @@ mongoose.set('useCreateIndex', true);
 require('./models/user');
 require('./config/passport');
 
-app.use(require('./routes'));
+app.use(require('./routes/api'));
 
 app.use(function(req, res, next) {
   const err = new Error('Not Found');
