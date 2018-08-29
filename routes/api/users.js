@@ -6,14 +6,31 @@ const auth = require('../auth');
 const User = mongoose.model('User');
 const io = require('../realtime');
 
-router.get('/users/list', function(req, res, next) {
+/**
+ * returns a list of users with support for simple pagination
+ */
+router.get('/users', auth.required, function(req, res, next) {
+  let page = parseInt(req.query.page) || 0;
+  page = page > 0 ? page - 1 : 0;
+
+  let limit = parseInt(req.query.limit) || 25;
+  limit = limit <= 100 ? limit : 100;
+
   User.find({}, { username: 1, email: 1 })
+    .limit(limit)
+    .skip((page > 0 ? page - 1 : 0) * limit)
+    .exec()
     .then(function(users) {
       return res.json({ users: users || [] });
     })
     .catch(next);
 });
 
+/**
+ * uses the request auth token to determine user and returns
+ * that users data along with an updated token - this can be used to
+ * refresh tokens but should have a more secure method in the future
+ */
 router.get('/user', auth.required, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
@@ -65,6 +82,9 @@ router.put('/user', auth.required, function(req, res, next) {
     .catch(next);
 });
 
+/**
+ * authenticates the credentials and returns the user data with a token
+ */
 router.post('/users/login', function(req, res, next) {
   if (!req.body.user.username && !req.body.user.email) {
     return res
@@ -95,7 +115,10 @@ router.post('/users/login', function(req, res, next) {
   })(req, res, next);
 });
 
-router.post('/user', function(req, res, next) {
+/**
+ * creates a new user with the username, email and password provided in the request body
+ */
+router.post('/users', auth.required, function(req, res, next) {
   const user = new User();
 
   user.username = req.body.user.username;
