@@ -1,3 +1,9 @@
+/**
+ * passport.js
+ *
+ * Configures passport.js with email and username login strategies
+ */
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
