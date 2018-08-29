@@ -1,7 +1,7 @@
 /**
  * users.js
  *
- * Creates the SocketIO io.namespace.users namespace
+ * Creates the socket.io io.namespace.users namespace
  */
 
 const io = require('./io');

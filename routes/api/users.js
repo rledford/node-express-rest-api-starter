@@ -4,7 +4,7 @@ const passport = require('passport');
 const auth = require('../auth');
 
 const User = mongoose.model('User');
-const io = require('../../socket');
+const io = require('../realtime');
 
 router.get('/users/list', function(req, res, next) {
   User.find({}, { username: 1, email: 1 })

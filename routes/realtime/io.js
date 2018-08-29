@@ -2,10 +2,10 @@
  * io.js
  *
  * Creates a socket.io server, configures it with authentication middleware, loads the other modules (i.e. users.js),
- * and exports functions to access the server instance and namespace names in other modules
+ * and exports functions to access the server instance and namespace names from other modules
  */
 
-const auth = require('../routes/auth');
+const auth = require('../auth');
 const namespace = {
   users: '/users'
 };

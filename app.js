@@ -13,7 +13,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
 const server = http.Server(app);
 
-require('./socket').init(server);
+require('./routes/realtime').init(server);
 
 app.use(cors());
 
