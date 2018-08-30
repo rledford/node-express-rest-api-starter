@@ -1,7 +1,7 @@
 /**
- * validate.js
+ * validator.js
  *
- * validates a request's query and/or body for different user operations
+ * provides middleware to validate a request's body and/or query
  */
 
 module.exports = {
@@ -31,6 +31,7 @@ module.exports = {
 
       next();
     },
+
     updateSelf: function(req, res, next) {
       if (typeof req.body.user !== 'object') {
         return res.status(422).json({
@@ -40,6 +41,7 @@ module.exports = {
 
       next();
     },
+
     updateOther: function(req, res, next) {
       if (typeof req.body.user !== 'object') {
         return res.status(422).json({
