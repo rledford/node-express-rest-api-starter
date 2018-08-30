@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const router = require('express').Router();
 const passport = require('passport');
+const rateLimiter = require('express-rate-limit');
 const User = mongoose.model('User');
 
 const auth = require('../../../auth');
@@ -8,6 +9,18 @@ const permit = require('../../../permission');
 const io = require('../../../realtime');
 
 const validator = require('./validator');
+
+loginLimiter = rateLimiter({
+  windowMs: 10 * 60 * 1000,
+  max: 5,
+  handler: function(req, res) {
+    return res.status(429).json({
+      errors: {
+        exeeded: 'maximum number of login attempts'
+      }
+    });
+  }
+});
 
 /**
  * uses the request auth token to determine the current user and returns
@@ -30,7 +43,7 @@ router.get('/user', auth.required, function(req, res, next) {
  * user document with the provided request body data - responds with the updated
  * document, and emits an 'update' event to the socket.io users namespace
  */
-router.put('/user', auth.required, validator.body.updateSelf, function(
+router.put('/user', auth.required, validator.body.update, function(
   req,
   res,
   next
@@ -125,7 +138,7 @@ router.post(
 /**
  * authenticates the credentials and returns the user data with a token
  */
-router.post('/users/login', function(req, res, next) {
+router.post('/users/login', loginLimiter, function(req, res, next) {
   if (!req.body.user.username && !req.body.user.email) {
     return res
       .status(422)

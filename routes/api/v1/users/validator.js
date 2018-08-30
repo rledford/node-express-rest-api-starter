@@ -32,17 +32,7 @@ module.exports = {
       next();
     },
 
-    updateSelf: function(req, res, next) {
-      if (typeof req.body.user !== 'object') {
-        return res.status(422).json({
-          errors: { 'request body': 'missing user object' }
-        });
-      }
-
-      next();
-    },
-
-    updateOther: function(req, res, next) {
+    update: function(req, res, next) {
       if (typeof req.body.user !== 'object') {
         return res.status(422).json({
           errors: { 'request body': 'missing user object' }
