@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+
 const secret = require('../config').secret;
+const roles = ['admin', 'provider', 'manager', 'user'];
 
 const Schema = mongoose.Schema;
 
@@ -24,6 +26,11 @@ const UserSchema = new Schema(
       match: [/\S+@\S.\S+/, 'is invalid'],
       index: true
     },
+    roles: {
+      type: [String],
+      enum: roles,
+      required: true
+    },
     image: String,
     hash: String,
     salt: String
@@ -32,6 +39,10 @@ const UserSchema = new Schema(
 );
 
 UserSchema.plugin(uniqueValidator, { message: 'is already in use' });
+
+UserSchema.statics.getPossibleRoles = function() {
+  return roles;
+};
 
 UserSchema.methods.validPassword = function(password) {
   const hash = crypto
@@ -56,6 +67,7 @@ UserSchema.methods.generateJWT = function() {
     {
       id: this._id,
       username: this.username,
+      roles: this.roles,
       exp: parseInt(exp.getTime() / 1000)
     },
     secret
@@ -66,6 +78,7 @@ UserSchema.methods.toAuthJSON = function() {
   return {
     username: this.username,
     email: this.email,
+    roles: this.roles,
     token: this.generateJWT(),
     image: this.image
   };
