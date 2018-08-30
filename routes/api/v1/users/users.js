@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 const router = require('express').Router();
 const passport = require('passport');
-const auth = require('../../auth');
-
 const User = mongoose.model('User');
-const io = require('../../realtime');
+
+const auth = require('../../../auth');
+const permit = require('../../../permission');
+const io = require('../../../realtime');
+
+const validator = require('./validator');
 
 /**
  * uses the request auth token to determine the current user and returns
@@ -27,17 +30,15 @@ router.get('/user', auth.required, function(req, res, next) {
  * user document with the provided request body data - responds with the updated
  * document, and emits an 'update' event to the socket.io users namespace
  */
-router.put('/user', auth.required, function(req, res, next) {
+router.put('/user', auth.required, validator.body.updateSelf, function(
+  req,
+  res,
+  next
+) {
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
         return res.sendStatus(401);
-      }
-
-      if (!req.body.user) {
-        return res
-          .status(422)
-          .json({ errors: { user: 'missing in request body' } });
       }
 
       const { username, email, image, password } = req.body.user;
@@ -73,7 +74,11 @@ router.put('/user', auth.required, function(req, res, next) {
 /**
  * returns a list of users with support for simple pagination
  */
-router.get('/users', auth.required, function(req, res, next) {
+router.get('/users', auth.required, permit('admin', 'manager'), function(
+  req,
+  res,
+  next
+) {
   let page = parseInt(req.query.page) || 0;
   page = page > 0 ? page - 1 : 0;
 
@@ -93,20 +98,29 @@ router.get('/users', auth.required, function(req, res, next) {
 /**
  * creates a new user with the username, email and password provided in the request body
  */
-router.post('/users', auth.required, function(req, res, next) {
-  const user = new User();
+router.post(
+  '/users',
+  auth.required,
+  permit('admin', 'manager'),
+  validator.body.create,
+  function(req, res, next) {
+    const user = new User();
 
-  user.username = req.body.user.username;
-  user.email = req.body.user.email;
-  user.setPassword(req.body.user.password);
+    const { username, roles, email, password } = req.body.user;
 
-  user
-    .save()
-    .then(function() {
-      return res.json({ user: user.toAuthJSON() });
-    })
-    .catch(next);
-});
+    user.username = username;
+    user.email = email;
+    user.roles = roles;
+    user.setPassword(password);
+
+    user
+      .save()
+      .then(function() {
+        return res.json({ user: user.toPublicJSON() });
+      })
+      .catch(next);
+  }
+);
 
 /**
  * authenticates the credentials and returns the user data with a token
