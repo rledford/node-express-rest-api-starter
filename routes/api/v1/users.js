@@ -34,28 +34,35 @@ router.put('/user', auth.required, function(req, res, next) {
         return res.sendStatus(401);
       }
 
-      if (typeof req.body.user.username !== 'undefined') {
-        user.username = req.body.user.username;
+      if (!req.body.user) {
+        return res
+          .status(422)
+          .json({ errors: { user: 'missing in request body' } });
       }
-      if (typeof req.body.user.email !== 'undefined') {
-        user.email = req.body.user.email;
+
+      const { username, email, image, password } = req.body.user;
+
+      if (typeof username !== 'undefined') {
+        user.username = username;
       }
-      if (typeof req.body.user.image !== 'undefined') {
-        user.image = req.body.user.image;
+      if (typeof email !== 'undefined') {
+        user.email = email;
       }
-      if (typeof req.body.user.password !== 'undefined') {
-        user.setPassword(req.body.user.password);
+      if (typeof image !== 'undefined') {
+        user.image = image;
+      }
+      if (typeof password !== 'undefined') {
+        user.setPassword(password);
       }
 
       return user.save().then(function() {
-        if (process.env.NODE_ENV !== 'production') {
-          try {
-            io.getInstance()
-              .of(io.namespace.users)
-              .emit('update', { user: user.toPublicJSON() });
-          } catch (err) {
-            console.log(`socket.io error ${err}`);
-          }
+        // socket.io emit is for demonstration only and should be removed
+        try {
+          io.getInstance()
+            .of(io.namespace.users)
+            .emit('update', { user: user.toPublicJSON() });
+        } catch (err) {
+          console.log(`socket.io error ${err}`);
         }
         return res.json({ user: user.toAuthJSON() });
       });
