@@ -1,8 +1,8 @@
 {
   "name": "node-express-rest-api-starter",
   "version": "0.1.0",
-  "description": "Basic starter for developing RESTful APIs using ExpressJS. Inspired by the node-express-realworld-example-app project by gothinkster",
-  "main": "index.js",
+  "description": "Basic starter for developing RESTful APIs using ExpressJS. Uses Passport local strategy for authentication and uses JWT for both API request authorization and connections to socket.io namespaces. Includes basic examples of mocha-chai tests.",
+  "main": "app.js",
   "scripts": {
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
