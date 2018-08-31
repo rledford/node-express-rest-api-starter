@@ -1,5 +1,11 @@
 const _ = require('underscore');
 
+/**
+ * middleware
+ * checks if the authenticated user is permitted to access the requested
+ * resource based on the roles passed in the fn args
+ * @param  {...any} allowed
+ */
 function permit(...allowed) {
   return (req, res, next) => {
     if (
@@ -10,10 +16,13 @@ function permit(...allowed) {
     }
 
     res.status(403).json({
-      errors: {
-        user:
-          'not permitted to access or perform the requested resource or action'
-      }
+      errors: [
+        {
+          code: 403,
+          location: 'user',
+          message: 'not permitted to access requested resource'
+        }
+      ]
     });
   };
 }
