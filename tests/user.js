@@ -12,11 +12,11 @@ let token = '';
 chai.use(chaiHttp);
 
 describe('Users', () => {
-  describe('/POST api/users/login', () => {
+  describe('/POST api/v1/users/login', () => {
     it('it should FAIL to authenticate with incorrect username / password', done => {
       chai
         .request(app)
-        .post('/api/users/login')
+        .post('/api/v1/users/login')
         .send({ user: { email: 'test@test.com', password: 'fsaddfsadfsadf' } })
         .end((err, res) => {
           res.should.have.status(422);
@@ -27,11 +27,11 @@ describe('Users', () => {
         });
     });
   });
-  describe('/POST api/users/login', () => {
+  describe('/POST api/v1/users/login', () => {
     it('it should successfully login', done => {
       chai
         .request(app)
-        .post('/api/users/login')
+        .post('/api/v1/users/login')
         .send({ user: { email: 'test@test.com', password: 'password' } })
         .end((err, res) => {
           res.should.have.status(200);
@@ -45,11 +45,11 @@ describe('Users', () => {
     });
   });
 
-  describe('/GET api/user', () => {
+  describe('/GET api/v1/user', () => {
     it('it should return the currently logged in user with an updated token', done => {
       chai
         .request(app)
-        .get('/api/user')
+        .get('/api/v1/user')
         .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(200);
@@ -61,11 +61,11 @@ describe('Users', () => {
     });
   });
 
-  describe('/GET api/users/list', () => {
+  describe('/GET api/v1/users', () => {
     it('it should GET the list of users', done => {
       chai
         .request(app)
-        .get('/api/users/list')
+        .get('/api/v1/users')
         .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(200);
