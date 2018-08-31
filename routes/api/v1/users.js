@@ -89,7 +89,16 @@ router.get('/user', auth.required, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
-        return res.sendStatus(401);
+        return res.status(401).json({
+          errors: [
+            {
+              code: 401,
+              location: 'token',
+              message:
+                'The user associated with the provided token no longer exists'
+            }
+          ]
+        });
       }
 
       return res.json({ user: user.toAuthJSON() });
@@ -142,7 +151,9 @@ router.put('/user', auth.required, checkBodyHasUser, function(req, res, next) {
         } catch (err) {
           console.log(`socket.io error ${err}`);
         }
-        return res.json({ user: user.toPublicJSON() });
+
+        // return the updated user with a new jwt
+        return res.json({ user: user.toAuthJSON() });
       });
     })
     .catch(next);
