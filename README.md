@@ -1,33 +1,33 @@
-<h4>NodeJS, Express, and socket.io REST API Starter</h4>
+<h4>Node, Express, Mongoose, and Passport REST API Starter (with realtime)</h4>
 <p>
-This starter provides the basic files, folders, and npm packages for building a simple REST API. Only the user model and routes are implemented, but the code in these files can be used as reference when adding new models, routes, middleware, etc. I referenced <a href='https://github.com/gothinkster/node-express-realworld-example-app' target='_blank'>this project by gothinkster</a> to get started as the code seems to abide by many of the best practices and the file/folder structure makes sense (to me). I looked through a lot of REST API boilerplates and didn't really like the way many of the projects were setup. I had also been testing a lot of frameworks like <a href='https://loopback.io' target='_blank'>LoopBack</a> and <a href='https://sailsjs.com' target='_blank'>SailsJS</a>, but in the end I just wanted more control and less magic.
+This project contains the basic files, folders, and npm packages for building a simple REST API server that is also capable of providing realtime data to connected clients. Only the user model, routes, and realtime namespace are implemented, but the code in these files can be used as a reference when adding new models, routes, middleware, etc. I used <a href='https://github.com/gothinkster/node-express-realworld-example-app' target='_blank'>this project by gothinkster</a> as a guide - the code seems to follow many of the best practices for REST API development, and the project structure makes sense (to me). I looked through a lot of REST API boilerplates and didn't really like the way many of the projects were setup. I had also been testing a lot of frameworks like <a href='https://loopback.io' target='_blank'>LoopBack</a> and <a href='https://sailsjs.com' target='_blank'>SailsJS</a> (which are great), but in the end I just wanted more control and less magic.
 </p>
-<h4>Goals</h4>
+<h4>The goals of this project are to...</h4>
 <ul>
-  <li>To have an easy-to-follow file/folder structure</li>
-  <li>To provide comments that explain what's going on</li>
-  <li>To have basic CRUD operations for the user model</li>
-  <li>To implement a basic authentication and JWT system</li>
-  <li>To have realtime capabilities using socket.io</li>
-  <li>To secure the realtime connection requests with the JWT system</li>
-  <li>To automate API testing with <a href='https://mochajs.org/' target='_blank'>MochaJS</a> and <a href='www.chaijs.com' target='_blank'>ChaiJS</a></li>
-  <li>To use HTTPS (this is not implemented yet)</li>
+  <li>have an easy-to-understand and approachable project structure</li>
+  <li>provide documented code that explains what is going on</li>
+  <li>demonstrate how to process API requests to make changes to the database</li>
+  <li>use a JSON web token system for API requests after a user authenticates with the server</li>
+  <li>use the same JSON web token system to authorize socket.io connection requests</li>
+  <li>use socket.io to send events when changes occur in the database</li>
+  <li>automate API testing with <a href='https://mochajs.org/' target='_blank'>MochaJS</a> and <a href='www.chaijs.com' target='_blank'>ChaiJS</a></li>
+  <li>use HTTPS (this is not implemented yet)</li>
 </ul>
-<h4>See How</h4>
+<h4>See how to...</h4>
 <ul>
-  <li>To wire up an Express app</li>
-  <li>To implement a login system using Passport local strategies</li>
-  <li>To use middleware to simplify the code within the routes</li>
-  <li>To protect API routes using middleware</li>
-  <li>To restrict authenticated user requests based on their roles using middleware</li>
-  <li>To limit the number of requests a client can make to one or more API endpoints</li>
-  <li>To create socket.io namespaces that require users to be authenticated to join</li>
-  <li>To use socket.io to send events to connected clients when the database updates a document</li>
-  <li>To implement methods and statics for a Mongoose schema</li>
-  <li>To respond to requests with helpful error messages</li>
-  <li>To automate API testing with MochaJS and ChaiJS</li>
+  <li>wire up an Express app</li>
+  <li>implement a login system using Passport local strategies</li>
+  <li>use middleware to simplify the code within the routes</li>
+  <li>protect API routes using middleware</li>
+  <li>restrict authenticated user requests based on their roles using middleware</li>
+  <li>limit the number of requests a client can make to one or more API endpoints</li>
+  <li>create socket.io namespaces that require users to be authenticated to join</li>
+  <li>use socket.io to send events to connected clients when the database updates a document</li>
+  <li>implement methods and statics for a Mongoose schema</li>
+  <li>respond to requests with helpful error messages</li>
+  <li>automate API testing with MochaJS and ChaiJS</li>
 </ul>
-<h4>Using</h4>
+<h4>Using these packages...</h4>
 <ul>
   <li><a href='https://www.npmjs.com/package/body-parser' target='_blank'>body-parser</a> - parse the request body and makes it available under the req.body property</li>
   <li><a href='https://www.npmjs.com/package/cors' target='_blank'>cors</a> - allow cross origin requests to access the API</li>
