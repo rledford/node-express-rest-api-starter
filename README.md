@@ -20,6 +20,7 @@ This starter provides the basic files, folders, and npm packages for building a 
   <li>To use middleware to simplify the code within the routes</li>
   <li>To protect API routes using middleware</li>
   <li>To restrict authenticated user requests based on their roles using middleware</li>
+  <li>To limit the number of requests a client can make to one or more API endpoints</li>
   <li>To create socket.io namespaces that require users to be authenticated to join</li>
   <li>To use socket.io to send events to connected clients when the database updates a document</li>
   <li>To implement methods and statics for a Mongoose schema</li>
