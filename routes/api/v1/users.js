@@ -106,7 +106,7 @@ router.put('/user', auth.required, checkBodyHasUser, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
-        res.status(401).json({
+        return res.status(401).json({
           errors: [
             {
               code: 401,
@@ -116,7 +116,6 @@ router.put('/user', auth.required, checkBodyHasUser, function(req, res, next) {
             }
           ]
         });
-        return res.sendStatus(401);
       }
 
       const { username, email, image, password } = req.body.user;
